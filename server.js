@@ -127,16 +127,19 @@ app.post('/api/send-text', async (req, res) => {
       console.log(smsBodyLines.join('\n'));
       console.log(`🎯 [DEMO] Would send to: ${destinationNumber}\n`);
     } else {
-      await twilioClient.messages.create({
+      console.log('📤 Sending SMS via Twilio...');
+      const messageResponse = await twilioClient.messages.create({
         body: smsBodyLines.join('\n'),
         from: TWILIO_FROM_NUMBER,
         to: destinationNumber
       });
+      console.log('✅ SMS sent successfully. SID:', messageResponse.sid);
     }
 
     return res.json({ ok: true });
   } catch (error) {
-    console.error(error);
+    console.error('❌ ERROR:', error.message);
+    console.error('Full error:', error);
     return res.status(500).json({
       ok: false,
       message: 'Failed to send text message.'
