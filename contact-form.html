@@ -229,7 +229,7 @@
               try {
                 data = JSON.parse(rawResponse);
               } catch (parseError) {
-                throw new Error('Server returned an invalid response. Please make sure the app is running from localhost.');
+                throw new Error('Server returned an invalid response. Please try again in a moment.');
               }
             }
 
