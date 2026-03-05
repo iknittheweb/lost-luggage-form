@@ -45,6 +45,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'contact-form.html'));
 });
 
+app.all('*', (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  return next();
+});
+
 function toArray(value) {
   if (Array.isArray(value)) {
     return value;
@@ -59,6 +64,9 @@ function toArray(value) {
 
 app.post('/api/send-text', async (req, res) => {
   try {
+    console.log('📨 API endpoint hit - processing submission');
+    console.log('Request body:', JSON.stringify(req.body));
+
     if (!demoMode && (!twilioClient || !TWILIO_FROM_NUMBER)) {
       return res.status(500).json({
         ok: false,
