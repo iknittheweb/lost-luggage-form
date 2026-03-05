@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap"
+      rel="stylesheet"
+    />
+    <title>Lost Item - Contact Us</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Found Our Item?</h1>
+      <p class="subtitle">
+        We'd love to hear from you! Please fill out the form below with your
+        contact information.
+      </p>
+
+      <form id="found-item-form" novalidate>
+        <div class="form-group">
+          <label for="name">Your Name *</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <fieldset class="form-group contact-options">
+          <legend>Best way to contact you *</legend>
+          <label class="checkbox-option" for="contact-email">
+            <input type="checkbox" id="contact-email" name="contactMethods" value="email" />
+            Email
+          </label>
+          <label class="checkbox-option" for="contact-phone">
+            <input type="checkbox" id="contact-phone" name="contactMethods" value="phone" />
+            Phone
+          </label>
+          <label class="checkbox-option" for="contact-other">
+            <input type="checkbox" id="contact-other" name="contactMethods" value="other" />
+            Other
+          </label>
+          <p id="contact-method-error" class="form-error is-hidden" role="alert" aria-live="polite">
+            Please choose at least one contact option.
+          </p>
+        </fieldset>
+
+        <div class="form-group is-hidden" id="email-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" />
+        </div>
+
+        <div class="form-group is-hidden" id="phone-group">
+          <label for="phone">Phone Number *</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+
+        <div class="form-group is-hidden" id="other-group">
+          <label for="other-contact">Other Contact Method *</label>
+          <input
+            type="text"
+            id="other-contact"
+            name="otherContact"
+            placeholder="Please tell us how to contact you"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message *</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Please describe the item you found and how we can claim it..."
+            required
+          ></textarea>
+        </div>
+
+        <p id="submit-status" class="submit-status is-hidden" role="status" aria-live="polite"></p>
+        <button id="submit-button" type="submit">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('found-item-form');
+        const contactEmailCheckbox = document.getElementById('contact-email');
+        const contactPhoneCheckbox = document.getElementById('contact-phone');
+        const contactOtherCheckbox = document.getElementById('contact-other');
+
+        const emailGroup = document.getElementById('email-group');
+        const phoneGroup = document.getElementById('phone-group');
+        const otherGroup = document.getElementById('other-group');
+
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const otherInput = document.getElementById('other-contact');
+        const contactMethodError = document.getElementById('contact-method-error');
+        const submitStatus = document.getElementById('submit-status');
+        const submitButton = document.getElementById('submit-button');
+
+        function updateConditionalFields() {
+          const showEmail = contactEmailCheckbox.checked;
+          const showPhone = contactPhoneCheckbox.checked;
+          const showOther = contactOtherCheckbox.checked;
+
+          emailGroup.classList.toggle('is-hidden', !showEmail);
+          phoneGroup.classList.toggle('is-hidden', !showPhone);
+          otherGroup.classList.toggle('is-hidden', !showOther);
+
+          emailInput.required = showEmail;
+          phoneInput.required = showPhone;
+          otherInput.required = showOther;
+
+          if (!showEmail) {
+            emailInput.value = '';
+          }
+
+          if (!showPhone) {
+            phoneInput.value = '';
+          }
+
+          if (!showOther) {
+            otherInput.value = '';
+          }
+        }
+
+        function validateContactMethodSelection() {
+          const selectedMethod =
+            contactEmailCheckbox.checked ||
+            contactPhoneCheckbox.checked ||
+            contactOtherCheckbox.checked;
+
+          if (!selectedMethod) {
+            contactMethodError.classList.remove('is-hidden');
+            contactMethodError.classList.add('is-visible');
+            return false;
+          } else {
+            contactMethodError.classList.add('is-hidden');
+            contactMethodError.classList.remove('is-visible');
+            return true;
+          }
+        }
+
+        function setSubmitStatus(message, type) {
+          submitStatus.textContent = message;
+          submitStatus.classList.remove('is-hidden', 'is-success', 'is-error');
+          submitStatus.classList.add(type === 'success' ? 'is-success' : 'is-error');
+        }
+
+        function clearContactMethodErrorIfValid() {
+          const selectedMethod =
+            contactEmailCheckbox.checked ||
+            contactPhoneCheckbox.checked ||
+            contactOtherCheckbox.checked;
+
+          if (selectedMethod) {
+            contactMethodError.classList.add('is-hidden');
+            contactMethodError.classList.remove('is-visible');
+          }
+        }
+
+        contactEmailCheckbox.addEventListener('change', function () {
+          updateConditionalFields();
+          clearContactMethodErrorIfValid();
+        });
+        contactPhoneCheckbox.addEventListener('change', function () {
+          updateConditionalFields();
+          clearContactMethodErrorIfValid();
+        });
+        contactOtherCheckbox.addEventListener('change', function () {
+          updateConditionalFields();
+          clearContactMethodErrorIfValid();
+        });
+        form.addEventListener('submit', async function (event) {
+          event.preventDefault();
+
+          if (window.location.protocol === 'file:') {
+            setSubmitStatus('Please open this form at http://localhost:3000/contact-form.html so it can reach the SMS server.', 'error');
+            return;
+          }
+
+          const contactMethodsValid = validateContactMethodSelection();
+          const nativeValid = form.checkValidity();
+
+          if (!contactMethodsValid || !nativeValid) {
+            form.reportValidity();
+            return;
+          }
+
+          const contactMethods = [];
+
+          if (contactEmailCheckbox.checked) {
+            contactMethods.push('email');
+          }
+
+          if (contactPhoneCheckbox.checked) {
+            contactMethods.push('phone');
+          }
+
+          if (contactOtherCheckbox.checked) {
+            contactMethods.push('other');
+          }
+
+          const payload = {
+            name: document.getElementById('name').value.trim(),
+            contactMethods,
+            email: emailInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            otherContact: otherInput.value.trim(),
+            message: document.getElementById('message').value.trim()
+          };
+
+          submitButton.disabled = true;
+          setSubmitStatus('Sending your message...', 'success');
+
+          try {
+            const response = await fetch('/api/send-text', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+
+            const rawResponse = await response.text();
+            let data = {};
+
+            if (rawResponse) {
+              try {
+                data = JSON.parse(rawResponse);
+              } catch (parseError) {
+                throw new Error('Server returned an invalid response. Please make sure the app is running from localhost.');
+              }
+            }
+
+            if (!response.ok || !data.ok) {
+              throw new Error(data.message || 'Unable to send your message right now.');
+            }
+
+            setSubmitStatus('Sent! Thank you for helping us find our item.', 'success');
+            form.reset();
+            updateConditionalFields();
+          } catch (error) {
+            setSubmitStatus(error.message || 'Unable to send your message right now.', 'error');
+          } finally {
+            submitButton.disabled = false;
+          }
+        });
+
+        updateConditionalFields();
+      });
+    </script>
+  </body>
+</html>

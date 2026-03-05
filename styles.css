@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Mouse Memoirs', Arial, Helvetica, sans-serif;
+  background-image: url("jonny-gios-rzWi69L90F4-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.container {
+  background: #f5f7f6;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  max-width: 100%;
+  width: 100%;
+}
+
+h1 {
+  color: #0a3d4d;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: #2c5f6f;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #0a3d4d;
+  font-weight: bold;
+}
+
+input:not([type='checkbox']),
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #2a8fa0;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  background: white;
+  color: #0a3d4d;
+}
+
+input:not([type='checkbox']):focus,
+textarea:focus {
+  outline: none;
+  border-color: #1a5f6f;
+  box-shadow: 0 0 8px rgba(26, 95, 111, 0.5);
+}
+
+.contact-options {
+  border: none;
+  padding: 0;
+}
+
+.contact-options legend {
+  margin-bottom: 8px;
+  color: #0a3d4d;
+  font-weight: bold;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+
+.checkbox-option input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #2a8fa0;
+  cursor: pointer;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.form-error {
+  margin-top: 4px;
+  color: #a10f2b;
+  font-size: 0.95rem;
+}
+
+.form-error.is-visible {
+  display: block;
+}
+
+.submit-status {
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+.submit-status.is-success {
+  color: #155724;
+}
+
+.submit-status.is-error {
+  color: #a10f2b;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #2a8fa0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background: #1a5f6f;
+}
+
+button:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+@media (min-width: 480px) {
+  body {
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 460px;
+    padding: 28px;
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 24px;
+  }
+
+  .container {
+    max-width: 500px;
+    padding: 36px;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  .subtitle {
+    margin-bottom: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 40px;
+  }
+}
